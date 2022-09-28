@@ -106,18 +106,25 @@ public class Boi implements  Bank{
 
         System.out.println("Enter Amount to transfer");
         float amt =sc.nextFloat();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
 
         if (getAmount() < amt) {
-            String t = " Transaction status : Error; Reason : Insufficient Balance " ;
-            write_log(amt,t);
+
+            String s = "Date : " + dtf.format(now) + "; Account number : " + getAccount_number() +
+                    "; Amount withdrawn : 0"  + "; Amount before withdrawn : " +getAmount()+ "; "+
+            " Transaction status : Error; Reason : Insufficient Balance " ;
+            write_log(amt,s);
             throw new InsufficientAmountException("You dont have enough amount ");
 
         }
         else{
-            String t = " Transaction status : Done ";
+            String s = "Date : " + dtf.format(now) + "; Account number : " + getAccount_number() +
+                    "; Amount withdrawn : 0"  + "; Amount before withdrawn : " +getAmount()+ "; "+
+                  " Transaction status : Done ";
 
             setAmount(getAccount_number()-amt);
-            write_log(amt,t);
+            write_log(amt,s);
 
 
         }
@@ -131,12 +138,10 @@ public class Boi implements  Bank{
 
         try {
             FileWriter myWriter = new FileWriter("boi_log.txt");
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-            LocalDateTime now = LocalDateTime.now();
 
-            String s = "Date : " + dtf.format(now) + "; Account number : " + getAccount_number() +
-                    "; Amount withdrawn : " + amt + "; Amount before withdrawn : " +getAmount()+ "; "+ trans;
-            myWriter.write(s);
+
+
+            myWriter.write(trans);
             myWriter.close();
 
         } catch (IOException e) {
@@ -148,6 +153,7 @@ public class Boi implements  Bank{
     public static void main(String[] args) {
         Boi obj = new Boi();
         obj.getDetails();
+        System.out.println("-------------------Printing Details ---------------------------------------");
         obj.printDetails();
         try {
             obj.transfer_money();

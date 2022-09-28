@@ -60,7 +60,7 @@ public class Sbi implements  Bank{
 
     @Override
     public void getDetails() {
-    Scanner sc = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         System.out.println("Enter account number:" );
         setAccount_number(sc.nextInt());
         sc.nextLine();
@@ -79,10 +79,10 @@ public class Sbi implements  Bank{
         int ch = sc.nextInt();
         if(ch == 1){
 
-             acc = account_type.CURRENT;
+            acc = account_type.CURRENT;
 
         }else{
-              acc = account_type.SAVING;
+            acc = account_type.SAVING;
         }
 
 
@@ -106,21 +106,28 @@ public class Sbi implements  Bank{
 
         System.out.println("Enter Amount to transfer");
         float amt =sc.nextFloat();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
 
-            if (getAmount() < amt) {
-               String t = " Transaction status : Error; Reason : Insufficient Balance " ;
-                write_log(amt,t);
-                throw new InsufficientAmountException("You dont have enough amount ");
+        if (getAmount() < amt) {
 
-            }
-            else{
-                String t = " Transaction status : Done ";
+            String s = "Date : " + dtf.format(now) + "; Account number : " + getAccount_number() +
+                    "; Amount withdrawn : 0"  + "; Amount before withdrawn : " +getAmount()+ "; "+
+                    " Transaction status : Error; Reason : Insufficient Balance " ;
+            write_log(amt,s);
+            throw new InsufficientAmountException("You dont have enough amount ");
 
-                setAmount(getAccount_number()-amt);
-                write_log(amt,t);
+        }
+        else{
+            String s = "Date : " + dtf.format(now) + "; Account number : " + getAccount_number() +
+                    "; Amount withdrawn : 0"  + "; Amount before withdrawn : " +getAmount()+ "; "+
+                    " Transaction status : Done ";
+
+            setAmount(getAccount_number()-amt);
+            write_log(amt,s);
 
 
-            }
+        }
 
 
 
@@ -131,12 +138,10 @@ public class Sbi implements  Bank{
 
         try {
             FileWriter myWriter = new FileWriter("sbi_log.txt");
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-            LocalDateTime now = LocalDateTime.now();
 
-            String s = "Date : " + dtf.format(now) + "; Account number : " + getAccount_number() +
-                    "; Amount withdrawn : " + amt + "; Amount before withdrawn : " +getAmount()+ "; "+ trans;
-            myWriter.write(s);
+
+
+            myWriter.write(trans);
             myWriter.close();
 
         } catch (IOException e) {
@@ -148,6 +153,7 @@ public class Sbi implements  Bank{
     public static void main(String[] args) {
         Sbi obj = new Sbi();
         obj.getDetails();
+        System.out.println("-------------------Printing Details ---------------------------------------");
         obj.printDetails();
         try {
             obj.transfer_money();

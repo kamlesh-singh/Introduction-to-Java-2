@@ -1,0 +1,1 @@
+Date : 2022/09/28 09:58:19; Account number : 1234; Amount withdrawn : 0; Amount before withdrawn : 100.0;  Transaction status : Error; Reason : Insufficient Balance 
